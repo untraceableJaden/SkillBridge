@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8"><title>SkillBridge</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<style>
+:root{--bg:#f4f6ff;--tx:#161a33;--mu:#5a6088;--cd:rgba(255,255,255,.72);--bd:rgba(90,100,200,.18);--ac:#5b5bf0;--ac2:#06b6d4;--ok:#0f9d6e;--bad:#e0436b;--wn:#c98a06;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#070a1c;--tx:#e8ebff;--mu:#9aa2d0;--cd:rgba(18,22,52,.66);--bd:rgba(130,140,255,.2);--ac:#8b8bff;--ac2:#22d3ee;--ok:#34d399;--bad:#fb7185;--wn:#fbbf24}}
+:root[data-theme=dark]{--bg:#070a1c;--tx:#e8ebff;--mu:#9aa2d0;--cd:rgba(18,22,52,.66);--bd:rgba(130,140,255,.2);--ac:#8b8bff;--ac2:#22d3ee;--ok:#34d399;--bad:#fb7185;--wn:#fbbf24}
+*{box-sizing:border-box}html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--tx);font:16px/1.55 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;min-height:100vh}
+#bg{position:fixed;inset:0;width:100%;height:100%;z-index:0}
+.wrap{position:relative;z-index:1;max-width:1040px;margin:0 auto;padding:20px 16px 60px}
+nav{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-bottom:24px}
+.logo{font-weight:800;font-size:20px;letter-spacing:-.02em}.logo b{background:linear-gradient(90deg,var(--ac),var(--ac2));-webkit-background-clip:text;background-clip:text;color:transparent}
+.tabs{display:flex;gap:6px;background:var(--cd);border:1px solid var(--bd);border-radius:99px;padding:4px;backdrop-filter:blur(10px)}
+.tabs button{border:0;background:none;color:var(--mu);padding:7px 16px;border-radius:99px;font:inherit;font-size:14px;cursor:pointer;transition:.25s}
+.tabs button.on{background:linear-gradient(90deg,var(--ac),var(--ac2));color:#fff}
+h1{font-size:clamp(28px,5vw,46px);line-height:1.1;letter-spacing:-.03em;margin:8px 0 10px}
+.sub{color:var(--mu);max-width:640px;margin:0 0 22px}
+.view{display:none}.view.on{display:block;animation:in .5s ease}
+@keyframes in{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+.card{background:var(--cd);border:1px solid var(--bd);border-radius:18px;padding:18px;backdrop-filter:blur(14px);box-shadow:0 8px 30px rgba(40,40,140,.12);margin-bottom:16px;animation:in .5s ease both}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:16px}@media(max-width:720px){.g2{grid-template-columns:1fr}}
+h2{font-size:17px;margin:0 0 10px}h3{font-size:15px;margin:0 0 6px}
+.drop{border:2px dashed var(--bd);border-radius:14px;padding:26px 12px;text-align:center;cursor:pointer;transition:.25s;color:var(--mu)}
+.drop:hover,.drop.dz{border-color:var(--ac);background:rgba(120,120,255,.08);transform:scale(1.01)}
+textarea{width:100%;min-height:150px;resize:vertical;background:transparent;color:var(--tx);border:1px solid var(--bd);border-radius:12px;padding:10px;font:14px/1.5 inherit}
+textarea:focus{outline:2px solid var(--ac)}
+.btn{border:0;border-radius:12px;padding:11px 20px;font:inherit;font-weight:600;color:#fff;background:linear-gradient(90deg,var(--ac),var(--ac2));cursor:pointer;transition:.25s;box-shadow:0 6px 20px rgba(91,91,240,.35)}
+.btn:hover{transform:translateY(-2px)}.btn.sm{padding:6px 12px;font-size:13px;background:none;color:var(--ac);border:1px solid var(--bd);box-shadow:none}
+.bar{height:6px;border-radius:9px;background:var(--bd);overflow:hidden;margin-top:8px}.bar i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--ac),var(--ac2));transition:width .6s}
+.msg{font-size:14px;margin-top:8px;padding:8px 12px;border-radius:10px}.msg.err{background:rgba(224,67,107,.14);color:var(--bad)}.msg.warn{background:rgba(201,138,6,.15);color:var(--wn)}.msg.ok{background:rgba(15,157,110,.14);color:var(--ok)}
+.chip{display:inline-block;margin:3px;padding:4px 11px;border-radius:99px;font-size:13px;border:1px solid var(--bd);animation:in .4s ease both}
+.chip.m{color:var(--ok);border-color:var(--ok)}.chip.x{color:var(--mu)}.chip.s{color:var(--bad);border-color:var(--bad)}
+.top{display:flex;gap:22px;align-items:center;flex-wrap:wrap}.ring{position:relative;width:130px;height:130px}.ring svg{transform:rotate(-90deg)}.ring span{position:absolute;inset:0;display:grid;place-items:center;font-size:28px;font-weight:800}
+.st{display:flex;gap:10px;flex-wrap:wrap}.st div{padding:8px 14px;border:1px solid var(--bd);border-radius:12px;font-size:13px;color:var(--mu)}.st b{display:block;font-size:22px;color:var(--tx)}
+.flt{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px}.flt button{border:1px solid var(--bd);background:none;color:var(--mu);border-radius:99px;padding:3px 11px;font-size:12px;cursor:pointer;transition:.2s}.flt button.on{background:var(--ac);color:#fff;border-color:var(--ac)}
+details{border:1px solid var(--bd);border-radius:12px;padding:9px 12px;margin:8px 0}summary{cursor:pointer;font-weight:600}
+q{display:block;margin:8px 0;padding:8px 12px;border-left:3px solid var(--ac2);background:rgba(34,211,238,.08);font-style:normal;quotes:none;border-radius:0 8px 8px 0}
+.tag{font-size:11px;padding:1px 8px;border-radius:9px;margin-left:6px;background:var(--bd);color:var(--mu);font-weight:500}
+.day{display:flex;gap:10px;align-items:flex-start;padding:10px 0;border-bottom:1px solid var(--bd);transition:.2s}.day.d{opacity:.55}.day input{margin-top:5px;width:18px;height:18px;accent-color:var(--ac)}
+.day small{color:var(--mu);display:block}
+table{width:100%;border-collapse:collapse;font-size:13px}td,th{padding:6px;border-bottom:1px solid var(--bd);text-align:left;vertical-align:top}
+.load{display:none;text-align:center;padding:30px}.load.on{display:block}.sp{width:44px;height:44px;margin:0 auto 10px;border-radius:50%;border:4px solid var(--bd);border-top-color:var(--ac);animation:r 1s linear infinite}@keyframes r{to{transform:rotate(360deg)}}
+.foot{color:var(--mu);font-size:12px;text-align:center;margin-top:20px}
+.side{position:fixed;top:0;left:0;bottom:0;width:216px;z-index:5;padding:20px 12px;padding-top:calc(20px + env(safe-area-inset-top,0px));background:var(--cd);backdrop-filter:blur(16px);border-right:1px solid var(--bd);display:flex;flex-direction:column;gap:4px;transition:transform .3s}
+.nv{display:block;width:100%;text-align:left;border:0;background:none;color:var(--mu);padding:10px 12px;border-radius:12px;font:inherit;font-size:14px;cursor:pointer;transition:.2s}.nv:hover{background:var(--bd);color:var(--tx);transform:translateX(3px)}.nv.on{background:linear-gradient(90deg,var(--ac),var(--ac2));color:#fff}
+.mb{display:none;position:fixed;top:calc(10px + env(safe-area-inset-top,0px));left:10px;z-index:6;border:1px solid var(--bd);background:var(--cd);color:var(--tx);border-radius:10px;padding:6px 12px;font-size:18px;backdrop-filter:blur(10px)}
+@media(min-width:861px){body{padding-left:216px}}
+@media(max-width:860px){.side{transform:translateX(-100%)}.side.open{transform:none}.mb{display:block}.wrap{padding-top:56px}}
+input:not([type]){background:transparent;color:var(--tx);border:1px solid var(--bd);border-radius:10px;padding:9px;font:inherit;width:100%}
+mark{color:inherit;border-radius:4px;padding:0 2px}mark.m{background:rgba(15,157,110,.28)}mark.x{background:rgba(224,67,107,.28)}
+.toast{position:fixed;bottom:24px;left:0;right:0;margin:auto;width:max-content;background:var(--ac);color:#fff;padding:8px 18px;border-radius:99px;z-index:20;animation:in .3s}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style></head><body>
+<canvas id="bg"></canvas>
+<div class="wrap">
+<button class='mb' id='mb' aria-label='Menu'>☰</button>
+<aside class='side' id='side'><div class='logo' style='margin:0 0 14px 6px'>Skill<b>Bridge</b></div>
+<button class='nv on' data-v='an'>🔍 Analyse</button><button class='nv' data-go='out'>📊 Results</button><button class='nv' data-go='rm'>🗓 14-day plan</button><button class='nv' data-v='hist'>🕘 History</button><button class='nv' data-v='lib'>📚 Skill library</button><button class='nv' data-v='ev'>🧪 Evaluation</button>
+<div style='flex:1'></div><div id='sprog' style='font-size:12px;color:var(--mu);padding:8px 12px'>No analysis yet</div><button class='nv' id='th'>🌓 Toggle theme</button></aside>
+
+<section id="v-an" class="view on">
+<h1>Find the skills standing between you and the offer.</h1>
+<p class="sub">Upload your resume PDF, paste a job description, and get matched and missing skills, the exact job-description line behind each gap, and a 14-day plan for your top 3 gaps.</p>
+<div class="g2">
+<div class="card"><h2>1 · Resume (PDF)</h2>
+<div class="drop" id="drop">Drag &amp; drop a PDF here, or click to browse<br><small>Max 5 MB · two-column, tables and icons supported</small></div>
+<input type="file" id="file" accept="application/pdf" hidden>
+<div class="bar"><i id="pb"></i></div><div id="rmsg"></div>
+<details><summary>No PDF? Paste resume text</summary><textarea id="rtxt" placeholder="Paste resume text…"></textarea></details></div>
+<div class="card"><h2>2 · Job description</h2><textarea id="jd" placeholder="Paste the job description…"></textarea>
+<button class="btn sm" id="sample" style="margin-top:8px">Load sample JD</button></div></div>
+<button class="btn" id="go">Analyse my skill gap →</button>
+<div class="load" id="load"><div class="sp"></div><div id="lt">Reading resume…</div></div>
+<div id="out" style="margin-top:18px"></div>
+</section>
+
+<section id='v-hist' class='view'><h1>History</h1><p class='sub'>Your recent analyses, stored only in this browser. Only scores and skill names are saved, never your resume text.</p><div class='card'><div id='hl2'></div><button class='btn sm' id='hc' style='margin-top:10px'>Clear history</button></div></section>
+<section id='v-lib' class='view'><h1>Skill library</h1><p class='sub'>Every skill and alias SkillBridge understands. Check whether two names count as the same skill.</p>
+<div class='card'><h2>Synonym tester</h2><div class='g2'><input id='ta' placeholder='e.g. ReactJS'><input id='tb' placeholder='e.g. React.js'></div><button class='btn sm' id='tst' style='margin-top:8px'>Compare</button><div id='tr'></div></div>
+<div class='card'><input id='lq' placeholder='Search skills or aliases…'></div><div id='ll'></div></section>
+<section id="v-ev" class="view">
+<h1>Answer-key evaluation</h1>
+<p class="sub">Runs the real analyser on test cases and compares predicted missing skills against an expected answer key. Nothing here is hardcoded: every number is computed when you press Run.</p>
+<div class="card"><h2>Test set</h2>
+<p style="font-size:14px;color:var(--mu)">The built-in set is a small sample key written by the developer, <b>not</b> a judge key. To score against the official key, paste JSON: <code>[{"resume":"…","jd":"…","expected":["Docker","AWS"]}]</code></p>
+<textarea id="ejson" placeholder="Optional: paste judge test cases as JSON"></textarea>
+<div style="margin-top:10px;display:flex;gap:8px;flex-wrap:wrap"><button class="btn" id="run1">Run built-in set</button><button class="btn" id="run2">Run pasted JSON</button><button class="btn sm" id="syn">Run synonym checks</button></div></div>
+<div id="eout"></div>
+<p class="foot">Access note: this is a client-side app, so the tab is not password-protected. Add server-side auth if you deploy it with real judge data.</p>
+</section>
+<p class="foot">Runs entirely in your browser. Your resume is never uploaded or stored.</p>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+<script>
+/* ===== 3D background ===== */
+/* Scene: RESUME platform → 14-plank bridge (the 14-day plan) → JOB platform; skill blocks cross it. */
+(function(){try{const c=document.getElementById('bg'),r=new THREE.WebGLRenderer({canvas:c,alpha:true,antialias:true}),s=new THREE.Scene(),cam=new THREE.PerspectiveCamera(50,1,.1,100);cam.position.set(0,2.5,15);cam.lookAt(0,1,0);
+const G=new THREE.Group();s.add(G);
+const wf=(col,o)=>new THREE.MeshBasicMaterial({color:col,wireframe:true,transparent:true,opacity:o});
+const pl=new THREE.Mesh(new THREE.BoxGeometry(3,.7,3),wf(0x22d3ee,.55));pl.position.set(-7.5,-.35,0);
+const pr=new THREE.Mesh(new THREE.BoxGeometry(3,.7,3),wf(0x8b8bff,.55));pr.position.set(7.5,-.35,0);G.add(pl,pr);
+const lab=(t,x,col)=>{const cv=document.createElement('canvas');cv.width=256;cv.height=64;const g=cv.getContext('2d');g.font='700 34px system-ui';g.fillStyle=col;g.textAlign='center';g.fillText(t,128,44);const sp=new THREE.Sprite(new THREE.SpriteMaterial({map:new THREE.CanvasTexture(cv),transparent:true,opacity:.9}));sp.scale.set(4,1,1);sp.position.set(x,1.1,0);return sp};
+G.add(lab('RESUME',-7.5,'#22d3ee'),lab('JOB',7.5,'#8b8bff'));
+const TOP=4.2,TX=[-3.6,3.6],ZS=[-1,1],pk=[],cab=[];
+for(const z of ZS)for(const x of TX){const t=new THREE.Mesh(new THREE.BoxGeometry(.3,TOP,.3),wf(0x8b8bff,.7));t.position.set(x,TOP/2,z);G.add(t)}
+for(let i=0;i<14;i++){const x=-6+12*(i+.5)/14,m=new THREE.Mesh(new THREE.BoxGeometry(.72,.14,2.2),new THREE.MeshBasicMaterial({color:0x22d3ee,transparent:true,opacity:.15}));m.position.set(x,0,0);G.add(m);pk.push(m);
+ for(const z of ZS){const tx=x<0?-3.6:3.6;cab.push(tx,TOP,z,x,.07,z*.95)}}
+for(const z of ZS){for(let i=0;i<20;i++){const a=-3.6+7.2*i/20,b=-3.6+7.2*(i+1)/20,y=q=>1.1+Math.pow(q/3.6,2)*(TOP-1.1);cab.push(a,y(a),z,b,y(b),z)}}
+const cg=new THREE.BufferGeometry();cg.setAttribute('position',new THREE.BufferAttribute(new Float32Array(cab),3));G.add(new THREE.LineSegments(cg,new THREE.LineBasicMaterial({color:0x8b8bff,transparent:true,opacity:.45})));
+const sk=[];for(let i=0;i<6;i++){const ok=i%3!==2,m=new THREE.Mesh(new THREE.BoxGeometry(.5,.5,.5),new THREE.MeshBasicMaterial({color:ok?0x34d399:0xfb7185,wireframe:true}));m.userData={o:i/6,ok};G.add(m);sk.push(m)}
+const n=300,p=new Float32Array(n*3);for(let i=0;i<n*3;i++)p[i]=(Math.random()-.5)*30;
+const pg=new THREE.BufferGeometry();pg.setAttribute('position',new THREE.BufferAttribute(p,3));s.add(new THREE.Points(pg,new THREE.PointsMaterial({color:0x8b8bff,size:.04,transparent:true,opacity:.5})));
+let mx=0,my=0;addEventListener('mousemove',e=>{mx=e.clientX/innerWidth-.5;my=e.clientY/innerHeight-.5});
+const rs=()=>{r.setSize(innerWidth,innerHeight);r.setPixelRatio(Math.min(devicePixelRatio,2));cam.aspect=innerWidth/innerHeight;cam.updateProjectionMatrix();const k=Math.min(1,innerWidth/1000);G.scale.setScalar(.45+.55*k);G.position.y=-1.2};rs();addEventListener('resize',rs);
+const still=matchMedia('(prefers-reduced-motion:reduce)').matches;
+(function a(t){const lit=(t/350)%18;pk.forEach((m,i)=>m.material.opacity=i<lit?.6:.12);
+ sk.forEach(m=>{const u=((t*1.5e-4+m.userData.o)%1);m.position.set(-9+18*u,.45+Math.sin(t*.004+m.userData.o*9)*.12,Math.sin(m.userData.o*20)*.5);m.rotation.y=t*.002;m.material.opacity=1;if(!m.userData.ok&&u>.1)m.visible=u<.35||u>.9?true:true});
+ G.rotation.y+=(Math.sin(t*3e-4)*.3+mx*.5-G.rotation.y)*.04;G.rotation.x+=(my*.2-G.rotation.x)*.04;r.render(s,cam);if(!still)requestAnimationFrame(a)})(0)}catch(e){}})();
+
+/* ===== Skill taxonomy: Category|Canonical|aliases… (alias ending ! = case-sensitive). Extend by adding lines. ===== */
+const TAX=`Languages|JavaScript|js!|JS!|ecmascript|es6
+Languages|TypeScript|TS!|typescript
+Languages|Python|py!
+Languages|Java
+Languages|C++|cpp
+Languages|C#|csharp|c sharp
+Languages|Go|golang
+Languages|SQL
+Languages|HTML|html5
+Languages|CSS|css3
+Languages|PHP
+Languages|Kotlin
+Languages|Swift
+Frontend|React|reactjs|react js
+Frontend|Angular|angularjs|angular js
+Frontend|Vue|vuejs|vue js
+Frontend|Next.js|nextjs|next js
+Frontend|Redux
+Frontend|Bootstrap
+Frontend|Tailwind CSS|tailwind|tailwindcss
+Frontend|jQuery
+Backend|Node.js|nodejs|node js|node
+Backend|Express|express js|expressjs
+Backend|Django
+Backend|Flask
+Backend|FastAPI
+Backend|Spring Boot|springboot|spring boot
+Backend|REST API|rest api|restful|restful api|rest web services
+Backend|GraphQL
+Backend|Microservices|microservice
+Databases|PostgreSQL|postgres|postgresql
+Databases|MongoDB|mongo db|mongo
+Databases|MySQL
+Databases|Redis
+Databases|SQLite
+Databases|Firebase
+Databases|Elasticsearch
+Cloud & DevOps|AWS|amazon web services
+Cloud & DevOps|Azure|microsoft azure
+Cloud & DevOps|GCP|google cloud|google cloud platform
+Cloud & DevOps|Docker|containerization
+Cloud & DevOps|Kubernetes|k8s
+Cloud & DevOps|CI/CD|cicd|ci cd|continuous integration
+Cloud & DevOps|Jenkins
+Cloud & DevOps|Terraform
+Cloud & DevOps|Linux
+Tools|Git
+Tools|GitHub|git hub
+Tools|GitLab
+Tools|Jira
+Tools|Postman
+Tools|Figma
+Tools|Jest
+Tools|JUnit
+Data & ML|Machine Learning|ML!|machine learning
+Data & ML|Deep Learning
+Data & ML|TensorFlow
+Data & ML|PyTorch
+Data & ML|Pandas
+Data & ML|NumPy
+Data & ML|scikit-learn|sklearn|scikit learn
+Data & ML|Power BI|powerbi
+Data & ML|Tableau
+Concepts|Data Structures|dsa|data structures and algorithms
+Concepts|OOP|object oriented programming|object-oriented
+Concepts|Agile|scrum
+Concepts|System Design`;
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const mk=a=>{const cs=a.endsWith('!');if(cs)a=a.slice(0,-1);const p=a.split(/[ .\-\/]+/).map(x=>x.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')).join('[\\s.\\-/]*');return new RegExp('(?<![A-Za-z0-9+#])'+p+'s?(?![A-Za-z0-9+#])',cs?'g':'gi')};
+const SK=TAX.split('\n').map(l=>{const [c,n,...al]=l.split('|');return{c,n,re:[n,...al].map(mk)}});
+const CAT={};SK.forEach(s=>CAT[s.n]=s.c);
+function detect(line){const m=[];for(const s of SK)for(const r of s.re){r.lastIndex=0;let x;while((x=r.exec(line)))m.push({n:s.n,a:x.index,b:x.index+x[0].length})}
+m.sort((p,q)=>(q.b-q.a)-(p.b-p.a));const k=[];for(const t of m)if(!k.some(o=>t.a<o.b&&o.a<t.b))k.push(t);return[...new Set(k.map(o=>o.n))]}
+const canon=t=>{const d=detect(t);return d.length?d[0]:t.trim().toLowerCase()};
+
+/* ===== JD parsing with exact evidence ===== */
+const PREF=/\b(preferred|nice to have|good to have|bonus|a plus|is a plus|optional|desirable|advantage)\b/i;
+function units(t){const out=[];let sec='req';for(const raw of t.split(/\r?\n/)){const l=raw.replace(/^[\s•\-*·▪●◦–]+/,'').replace(/^\d+[.)]\s+/,'').trim();if(!l)continue;
+const h=l.length<70&&(/[:：]$/.test(l)||!detect(l).length);
+if(h){if(/prefer|nice|bonus|good to have|optional|desirable/i.test(l)){sec='pref';continue}if(/require|must|qualif|responsib|skills|about|looking|what you/i.test(l)){sec='req';continue}}
+for(const s of l.split(/(?<=[.!?;])\s+/)){const u=s.trim();if(u)out.push({t:u,pref:sec==='pref'||PREF.test(u)})}}return out}
+
+function analyse(rt,jd){
+const rs=new Set();rt.split(/\n/).forEach(l=>detect(l).forEach(s=>rs.add(s)));
+const J={};for(const u of units(jd))for(const s of detect(u.t)){const e=J[s];if(!e)J[s]={pref:u.pref,ev:u.t,count:1};else{e.count++;if(e.pref&&!u.pref){e.pref=false;e.ev=u.t}}}
+const matched=[],missing=[];for(const s in J){const e={name:s,cat:CAT[s],...J[s],verified:jd.includes(J[s].ev)};(rs.has(s)?matched:missing).push(e)}
+const rank=(a,b)=>(a.pref-b.pref)||(b.count-a.count);missing.sort(rank);matched.sort(rank);
+const extra=[...rs].filter(s=>!J[s]).map(s=>({name:s,cat:CAT[s]}));
+const R=Object.values(J).filter(e=>!e.pref).length,P=Object.values(J).length-R;
+const mR=matched.filter(e=>!e.pref).length,mP=matched.length-mR,den=R+.5*P;
+return{matched,missing,extra,score:den?Math.round((mR+.5*mP)/den*100):null,R,P,mR,mP,resumeSkills:[...rs]}}
+
+/* ===== PDF extraction (layout-aware) ===== */
+async function extractPDF(buf,prog){const pdf=await pdfjsLib.getDocument({data:buf}).promise;let txt='',cols=0;
+for(let p=1;p<=pdf.numPages;p++){prog&&prog(p/pdf.numPages);const pg=await pdf.getPage(p),W=pg.getViewport({scale:1}).width,tc=await pg.getTextContent();
+const it=tc.items.filter(i=>i.str&&i.str.trim()).map(i=>({s:i.str,x:i.transform[4],y:i.transform[5],w:i.width||0}));if(!it.length)continue;
+const B=Math.ceil(W/4),cov=new Uint8Array(B+2);it.forEach(i=>{for(let b=Math.floor(i.x/4);b<=Math.min(B,Math.floor((i.x+i.w)/4));b++)cov[b]=1});
+let best=0,bs=0,run=0;for(let b=Math.floor(B*.25);b<=Math.floor(B*.75);b++){if(!cov[b]){run++;if(run>best){best=run;bs=b-run+1}}else run=0}
+let groups=[it];if(best>=3){const sx=(bs+best/2)*4,L=it.filter(i=>i.x+i.w/2<sx),Rr=it.filter(i=>i.x+i.w/2>=sx);if(L.length>it.length*.15&&Rr.length>it.length*.15){groups=[L,Rr];cols++}}
+for(const g of groups){g.sort((a,b)=>b.y-a.y||a.x-b.x);const rows=[];for(const i of g){const l=rows[rows.length-1];if(l&&Math.abs(l.y-i.y)<3)l.it.push(i);else rows.push({y:i.y,it:[i]})}
+for(const r of rows){r.it.sort((a,b)=>a.x-b.x);let s='',e=null;for(const i of r.it){s+=(e===null?'':(i.x-e>12?' | ':' '))+i.s;e=i.x+i.w}txt+=s+'\n'}}}
+txt=txt.replace(/[\uE000-\uF8FF\u2022-\u25FF\u2600-\u27BF]|[\u{1F000}-\u{1FFFF}]/gu,' ').replace(/[ \t]+/g,' ');
+return{text:txt,pages:pdf.numPages,cols}}
+const SEC=['Skills','Education','Projects','Experience','Certifications','Achievements'];
+const secs=t=>SEC.filter(s=>new RegExp('^\\s*'+s+'\\b',"im").test(t));
+
+/* ===== Roadmap ===== */
+const FOC={'Languages':['syntax, types and control flow','functions, collections and error handling','Solve 5 problems using functions and collections'],'Frontend':['components, markup and styling','state, events and data fetching','Build a small interactive widget'],'Backend':['routing and request handling','middleware, validation and data access','Build 3 endpoints with input validation'],'Databases':['schemas and basic queries','indexes, joins and modelling','Design a 3-table schema and write 10 queries'],'Cloud & DevOps':['core commands and concepts','configuration, images/services and automation','Deploy a sample app end to end'],'Tools':['everyday workflow','collaboration features','Practise a full workflow on a sample repo'],'Data & ML':['data handling basics','modelling and evaluation','Analyse a public dataset and write 3 insights'],'Concepts':['fundamentals','applying patterns','Work through 5 worked examples']};
+function steps(m){const s=m.name,f=FOC[m.cat]||FOC.Concepts,q=m.ev;return[
+{t:`Introduction to ${s}`,a:`Read the official getting-started guide; note why this role needs ${s}.`,x:`Write 5 lines on what ${s} is, linking to the JD: “${q}”`,o:`You can explain ${s} in your own words.`,h:1.5},
+{t:`${s} setup and ${f[0]}`,a:`Install or set up ${s} and follow a beginner tutorial on ${f[0]}.`,x:`Complete 3 guided exercises on ${f[0]}.`,o:`A working ${s} environment and the basics.`,h:2},
+{t:`${s}: ${f[1]}`,a:`Study ${f[1]} with documentation and one video.`,x:f[2],o:`Hands-on confidence with core concepts.`,h:2},
+{t:`Applying ${s} to this job`,a:`Map the JD requirement to a concrete task.`,x:`Re-create this requirement as a tiny working example: “${q}”`,o:`A demo tied directly to the posting.`,h:2},
+{t:`${s} practice and debugging`,a:`Practise typical mistakes and fixes.`,x:`Solve 5 interview-style questions on ${s}.`,o:`Ready for ${s} interview questions.`,h:2},
+{t:`${s} mini-project`,a:`Build a small project end to end.`,x:`Build and push to GitHub a small project using ${s}, with a README.`,o:`A portfolio item showing ${s}.`,h:3}]}
+function plan(missing){const top=missing.slice(0,3),n=top.length;if(!n)return{top,days:[]};const per=Math.floor(12/n),days=[];
+top.forEach(m=>{const st=steps(m);for(let i=0;i<per;i++){let k;if(per===4)k=[0,1,3,5][i];else if(per===6)k=i;else k=Math.min(5,Math.floor(i*6/per));const b=st[k];days.push({skill:m.name,...b,t:b.t+(per>6&&i%2?' (continued)':'')})}});
+const nm=top.map(m=>m.name).join(', ');
+days.push({skill:'Revision',t:'Revision and gap check',a:`Review notes and weak spots for ${nm}.`,x:'Re-answer 10 flashcard questions without notes.',o:'Gaps closed before the project.',h:2});
+days.push({skill:'Final project',t:'Final mini-project',a:`Combine ${nm} in one project aligned to the JD.`,x:`Build a small app using ${nm}; document it in a README.`,o:'A job-targeted project for your resume.',h:4});
+days.forEach((d,i)=>d.day=i+1);return{top,days}}
+
+/* ===== UI ===== */
+const $=id=>document.getElementById(id);let S={res:null,cat:'All',key:''};let resumeText='';
+function toast(t){const d=document.createElement('div');d.className='toast';d.textContent=t;document.body.appendChild(d);setTimeout(()=>d.remove(),2200)}
+function show(v){document.querySelectorAll('.view').forEach(x=>x.classList.toggle('on',x.id==='v-'+v));document.querySelectorAll('.nv[data-v]').forEach(b=>b.classList.toggle('on',b.dataset.v===v));$('side').classList.remove('open');if(v==='hist')renderHist();if(v==='lib')renderLib();scrollTo({top:0,behavior:'smooth'})}
+document.querySelectorAll('.nv[data-v]').forEach(b=>b.onclick=()=>show(b.dataset.v));
+document.querySelectorAll('.nv[data-go]').forEach(b=>b.onclick=()=>{show('an');const t=$(b.dataset.go);t&&t.innerHTML?setTimeout(()=>t.scrollIntoView({behavior:'smooth'}),60):toast('Run an analysis first')});
+$('mb').onclick=()=>$('side').classList.toggle('open');
+$('th').onclick=()=>{const d=document.documentElement,dark=getComputedStyle(d).getPropertyValue('--bg').trim()==='#070a1c';d.dataset.theme=dark?'light':'dark'};
+function getH(){try{return JSON.parse(localStorage.getItem('sb-hist')||'[]')}catch(e){return[]}}
+function saveHist(r){const h=getH();h.unshift({d:new Date().toLocaleString(),s:r.score,t:r.plan.top.map(m=>m.name),j:r.jd.split('\n')[0].slice(0,60)});try{localStorage.setItem('sb-hist',JSON.stringify(h.slice(0,20)))}catch(e){}}
+function renderHist(){const h=getH();$('hl2').innerHTML=h.length?`<table><tr><th>When</th><th>Role (JD first line)</th><th>Score</th><th>Top gaps</th></tr>${h.map(e=>`<tr><td>${esc(e.d)}</td><td>${esc(e.j)}</td><td>${e.s===null?'n/a':e.s+'%'}</td><td>${esc(e.t.join(', ')||'none')}</td></tr>`).join('')}</table>`:'<small>No analyses yet.</small>'}
+$('hc').onclick=()=>{try{localStorage.removeItem('sb-hist')}catch(e){}renderHist()};
+function renderLib(){const q=($('lq').value||'').toLowerCase(),by={};TAX.split('\n').forEach(l=>{const[c,n,...a]=l.split('|'),al=a.map(x=>x.replace(/!$/,''));if(!q||(n+' '+al.join(' ')).toLowerCase().includes(q))(by[c]=by[c]||[]).push([n,al])});
+$('ll').innerHTML=Object.entries(by).map(([c,v])=>`<div class='card'><h3>${esc(c)}</h3>${v.map(([n,al])=>`<span class='chip m'>${esc(n)}</span>${al.length?`<small style='color:var(--mu)'>= ${esc(al.join(', '))}</small>`:''}`).join('<br>')}</div>`).join('')||'<small>No match.</small>'}
+$('lq').oninput=renderLib;
+$('tst').onclick=()=>{const a=$('ta').value,b=$('tb').value,x=detect(a),y=detect(b);$('tr').innerHTML=!x.length||!y.length?`<div class='msg warn'>Not in the library: ${esc(!x.length?a:b)}</div>`:x.some(s=>y.includes(s))?`<div class='msg ok'>Same skill → ${esc(x[0])}</div>`:`<div class='msg err'>Different skills: ${esc(x[0])} vs ${esc(y[0])}</div>`};
+function report(){const r=S.res;return 'SkillBridge report\nMatch score: '+(r.score===null?'n/a':r.score+'%')+'\n\nMATCHED: '+(r.matched.map(x=>x.name).join(', ')||'-')+'\n\nMISSING (with job-description evidence):\n'+(r.missing.map(x=>'- '+x.name+' ['+(x.pref?'preferred':'required')+']: "'+x.ev+'"').join('\n')||'-')+'\n\nEXTRA RESUME SKILLS: '+(r.extra.map(x=>x.name).join(', ')||'-')+'\n\n14-DAY PLAN:\n'+r.plan.days.map(d=>'Day '+d.day+': '+d.t+' ('+d.h+'h)').join('\n')}
+function bindTools(){const r=S.res;
+$('cp').onclick=async()=>{const t=report();try{await navigator.clipboard.writeText(t);toast('Report copied')}catch(e){const a=document.createElement('textarea');a.value=t;document.body.appendChild(a);a.select();try{document.execCommand('copy');toast('Report copied')}catch(x){toast('Copy blocked by the browser')}a.remove()}};
+$('rst').onclick=()=>{try{localStorage.removeItem(S.key)}catch(e){}roadmap();toast('Plan progress reset')};
+$('hl').onclick=()=>{const m={};r.matched.forEach(x=>m[x.ev]='m');r.missing.forEach(x=>m[x.ev]='x');let h=esc(r.jd);for(const ev in m){const e=esc(ev),i=h.indexOf(e);if(i>=0)h=h.slice(0,i)+`<mark class='${m[ev]}'>`+e+'</mark>'+h.slice(i+e.length)}
+$('jdv').innerHTML=$('jdv').innerHTML?'':`<div class='card'><h3>Job description: <mark class='m'>matched</mark> <mark class='x'>missing</mark></h3><div style='white-space:pre-wrap;font-size:14px'>${h}</div></div>`};
+const cv={};[...r.matched.map(x=>[x.cat,1]),...r.missing.map(x=>[x.cat,0])].forEach(([c,m])=>{cv[c]=cv[c]||[0,0];cv[c][1]++;cv[c][0]+=m});
+$('cov').innerHTML='<h2>Coverage by category</h2>'+Object.entries(cv).map(([c,[a,b]])=>`<div style='font-size:13px;margin-top:8px'>${esc(c)} · ${a}/${b}</div><div class='bar'><i style='width:${a/b*100}%'></i></div>`).join('')}
+const msg=(c,t)=>$('rmsg').innerHTML=`<div class="msg ${c}">${esc(t)}</div>`;
+async function loadFile(f){resumeText='';$('pb').style.width='0';
+if(!f)return;if(f.size>5*1048576)return msg('err','File is larger than 5 MB.');
+if(f.type!=='application/pdf'&&!/\.pdf$/i.test(f.name))return msg('err','Please upload a PDF file.');
+try{const buf=await f.arrayBuffer();if(new TextDecoder().decode(buf.slice(0,5))!=='%PDF-')return msg('err','This file is not a valid PDF.');
+pdfjsLib.GlobalWorkerOptions.workerSrc='https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+const r=await extractPDF(buf,p=>$('pb').style.width=Math.round(p*100)+'%');$('pb').style.width='100%';
+if(r.text.replace(/\s/g,'').length<120){msg('err','Very little text was found. This looks like a scanned or image-only PDF. OCR is not available in this hosted version, so please paste the resume text below.');return}
+resumeText=r.text;const n=new Set(r.text.split('\n').flatMap(detect)).size;
+msg(n<3?'warn':'ok',`Extracted ${r.pages} page(s)${r.cols?`, two-column layout detected on ${r.cols} page(s)`:''}; sections: ${secs(r.text).join(', ')||'none detected'}; ${n} skills found.${n<3?' Extraction quality may be low: check the PDF or paste text instead.':''}`)}
+catch(e){msg('err','Could not read this PDF (it may be corrupted or password-protected).')}}
+const dr=$('drop');dr.onclick=()=>$('file').click();$('file').onchange=e=>loadFile(e.target.files[0]);
+['dragover','dragenter'].forEach(v=>dr.addEventListener(v,e=>{e.preventDefault();dr.classList.add('dz')}));
+['dragleave','drop'].forEach(v=>dr.addEventListener(v,e=>{e.preventDefault();dr.classList.remove('dz')}));dr.addEventListener('drop',e=>loadFile(e.dataTransfer.files[0]));
+$('sample').onclick=()=>$('jd').value=`Frontend Engineer Intern\nRequirements:\n- Strong knowledge of React.js and JavaScript.\n- Experience with TypeScript and REST APIs.\n- Practical knowledge of Docker and containerization.\n- Familiarity with CI/CD pipelines.\nPreferred:\n- Experience with AWS or GraphQL.`;
+const wait=ms=>new Promise(r=>setTimeout(r,ms));
+$('go').onclick=async()=>{const rt=resumeText||$('rtxt').value.trim(),jd=$('jd').value.trim();
+if(!rt)return msg('err','Upload a resume PDF or paste resume text first.');if(!jd)return $('out').innerHTML='<div class="msg err">Paste a job description first.</div>';
+$('out').innerHTML='';$('load').classList.add('on');for(const t of['Normalising skills…','Matching synonyms…','Finding evidence lines…','Building your roadmap…']){$('lt').textContent=t;await wait(350)}
+const res=analyse(rt,jd);res.jd=jd;res.plan=plan(res.missing);S={res,cat:'All',key:'sb-'+res.plan.top.map(m=>m.name).join('+')+jd.length};$('load').classList.remove('on');saveHist(res);draw()};
+function pass(arr,cats){return arr.filter(x=>S.cat==='All'||x.cat===S.cat)}
+function draw(){const r=S.res;if(!r.R&&!r.P){$('out').innerHTML='<div class="card"><div class="msg warn">No known skills were detected in the job description, so no comparison is possible. Try a more detailed JD.</div></div>';return}
+const cats=['All',...new Set([...r.matched,...r.missing,...r.extra].map(x=>x.cat))],C=2*Math.PI*54;
+$('out').innerHTML=`<div class="card top"><div class="ring"><svg width="130" height="130"><circle cx="65" cy="65" r="54" fill="none" stroke="var(--bd)" stroke-width="10"/><circle id="arc" cx="65" cy="65" r="54" fill="none" stroke="var(--ac)" stroke-width="10" stroke-linecap="round" stroke-dasharray="${C}" stroke-dashoffset="${C}" style="transition:stroke-dashoffset 1.2s ease"/></svg><span id="sc">0%</span></div>
+<div><div class="st"><div><b>${r.matched.length}</b>matched</div><div><b>${r.missing.length}</b>missing</div><div><b>${r.extra.length}</b>extra</div></div>
+<p style="font-size:12px;color:var(--mu);margin:8px 0 0">Score = (matched required + 0.5 × matched preferred) ÷ (required + 0.5 × preferred) = (${r.mR} + 0.5×${r.mP}) ÷ (${r.R} + 0.5×${r.P}).</p></div></div>
+<div class='card' style='display:flex;gap:8px;flex-wrap:wrap'><button class='btn sm' id='cp'>📋 Copy report</button><button class='btn sm' id='hl'>🔦 Highlight JD</button><button class='btn sm' id='rst'>↺ Reset plan progress</button></div><div id='jdv'></div><div class='card' id='cov'></div>
+<div class="card"><div class="flt">${cats.map(c=>`<button class="${c===S.cat?'on':''}" data-c="${esc(c)}">${esc(c)}</button>`).join('')}</div><div id="lists"></div></div>
+<div class="card" id="rm"></div>`;
+document.querySelectorAll('.flt button').forEach(b=>b.onclick=()=>{S.cat=b.dataset.c;document.querySelectorAll('.flt button').forEach(x=>x.classList.toggle('on',x===b));lists()});
+lists();roadmap();bindTools();requestAnimationFrame(()=>{setTimeout(()=>{$('arc').style.strokeDashoffset=C*(1-(r.score||0)/100);let n=0;const t=setInterval(()=>{n=Math.min(r.score,n+2);$('sc').textContent=n+'%';if(n>=r.score)clearInterval(t)},18)},50)})}
+function lists(){const r=S.res,m=pass(r.matched),x=pass(r.missing),e=pass(r.extra);
+$('lists').innerHTML=`<h3>✅ Matched skills</h3>${m.map(s=>`<span class="chip m">${esc(s.name)}${s.pref?'<span class="tag">preferred</span>':''}</span>`).join('')||'<small>None</small>'}
+<h3 style="margin-top:14px">❌ Missing skills: tap for the job-description line</h3>${x.map(s=>`<details><summary>${esc(s.name)}<span class="tag">${s.pref?'preferred':'required'}</span></summary>
+${s.verified?`<q>${esc(s.ev)}</q><small>${esc(s.name)} appears in the job description above but was not detected in your resume (including aliases).</small>`:'<small>Evidence could not be verified in the original text.</small>'}</details>`).join('')||'<small>No missing skills 🎉</small>'}
+<h3 style="margin-top:14px">➕ Additional resume skills</h3>${e.map(s=>`<span class="chip x">${esc(s.name)}</span>`).join('')||'<small>None</small>'}`}
+function roadmap(){const r=S.res,p=r.plan;if(!p.days.length){$('rm').innerHTML='<h2>14-day plan</h2><div class="msg ok">No missing skills, so there is nothing to learn for this role. Nice!</div>';return}
+let done={};try{done=JSON.parse(localStorage.getItem(S.key)||'{}')}catch(e){}
+$('rm').innerHTML=`<h2>🗓 14-day plan · ${p.top.map(m=>esc(m.name)).join(' · ')}</h2><div class="bar"><i id="rp"></i></div><small id="rt" style="color:var(--mu)"></small>
+${p.days.map(d=>`<label class="day ${done[d.day]?'d':''}"><input type="checkbox" data-d="${d.day}" ${done[d.day]?'checked':''}><div><b>Day ${d.day} · ${esc(d.t)}</b><span class="tag">${esc(d.skill)} · ${d.h}h</span><small><b>Activity:</b> ${esc(d.a)}</small><small><b>Exercise:</b> ${esc(d.x)}</small><small><b>Outcome:</b> ${esc(d.o)}</small></div></label>`).join('')}`;
+const upd=()=>{const n=Object.values(done).filter(Boolean).length;$('rp').style.width=n/14*100+'%';$('rt').textContent=`${n}/14 days completed · ${p.days.reduce((a,d)=>a+d.h,0)}h total`;$('sprog').textContent=`Score ${S.res.score===null?'n/a':S.res.score+'%'} · Plan ${n}/14`};upd();
+document.querySelectorAll('#rm input').forEach(i=>i.onchange=()=>{done[i.dataset.d]=i.checked;i.closest('.day').classList.toggle('d',i.checked);try{localStorage.setItem(S.key,JSON.stringify(done))}catch(e){}upd()})}
+
+/* ===== Evaluation ===== */
+const DEF=[
+{resume:"Skills: ReactJS, JS, HTML5, CSS3, Git Hub. Projects: portfolio built with ReactJS and Tailwind.",jd:"We need a frontend engineer.\nRequired:\n- Strong knowledge of React.js and JavaScript.\n- Experience with TypeScript and REST APIs.\n- Familiarity with Docker.\nPreferred:\n- GitHub workflows.",expected:["TypeScript","REST API","Docker"]},
+{resume:"Backend developer. NodeJS, Express.js, Mongo DB, Postgres, AWS EC2, Git.",jd:"Looking for a backend dev: Node.js, PostgreSQL, MongoDB required. Must know Redis and Kubernetes. Good to have: GraphQL.",expected:["Redis","Kubernetes","GraphQL"]},
+{resume:"Python, Pandas, NumPy, scikit-learn, SQL, Tableau.",jd:"Data analyst role.\nRequirements:\n• Python and SQL\n• Machine learning with sklearn\n• Power BI dashboards\n• TensorFlow or PyTorch experience",expected:["Power BI","TensorFlow","PyTorch"]},
+{resume:"Java, Spring Boot, MySQL, JUnit, Maven, Git, Agile.",jd:"Java Developer\nResponsibilities include building microservices with Spring Boot.\nMust have: Java, MySQL, Docker, Jenkins.\nNice to have: Kubernetes and AWS.",expected:["Microservices","Docker","Jenkins","Kubernetes","AWS"]},
+{resume:"Frontend developer: Vue.js, Bootstrap, jQuery, HTML, CSS, JavaScript",jd:"Seeking React developer with Angular exposure. Must know TypeScript, Redux and Next.js. Experience with Jest testing is a plus.",expected:["React","Angular","TypeScript","Redux","Next.js","Jest"]},
+{resume:"ReactJS, NodeJS, MongoDB, Git, Docker",jd:"Required: React.js, Node.js, Mongo DB, Docker, Git.",expected:[]}];
+const pc=(a,b)=>b?(a/b*100).toFixed(1)+'%':'n/a';
+function evaluate(cs){let TP=0,FP=0,FN=0,ex=0,jac=0;const rows=cs.map((c,i)=>{const P=new Set(analyse(c.resume,c.jd).missing.map(m=>m.name)),E=new Set(c.expected.map(canon));
+const tp=[...P].filter(x=>E.has(x)),fp=[...P].filter(x=>!E.has(x)),fn=[...E].filter(x=>!P.has(x));TP+=tp.length;FP+=fp.length;FN+=fn.length;
+const same=!fp.length&&!fn.length;if(same)ex++;const u=new Set([...P,...E]).size;jac+=u?tp.length/u:1;return`<tr><td>${i+1}</td><td>${esc([...P].join(', ')||'—')}</td><td>${esc([...E].join(', ')||'—')}</td><td>${tp.length}/${fp.length}/${fn.length}</td><td>${same?'✅':'❌'}</td></tr>`});
+const p=TP+FP?TP/(TP+FP):null,r=TP+FN?TP/(TP+FN):null,f=p!==null&&r!==null&&p+r?2*p*r/(p+r):null,n=cs.length;
+const ok=f!==null&&f>=.7;
+$('eout').innerHTML=`<div class="card"><h2>Report · ${n} test case(s)</h2><div class="st"><div><b>${TP}</b>TP (correct)</div><div><b>${FP}</b>FP (wrong)</div><div><b>${FN}</b>FN (missed)</div></div>
+<table style="margin-top:12px"><tr><td>Precision</td><td>${p===null?'n/a':(p*100).toFixed(1)+'%'}</td></tr><tr><td>Recall</td><td>${r===null?'n/a':(r*100).toFixed(1)+'%'}</td></tr><tr><td>F1</td><td>${f===null?'n/a':(f*100).toFixed(1)+'%'}</td></tr><tr><td>Exact-set match rate</td><td>${pc(ex,n)}</td></tr><tr><td>Mean Jaccard</td><td>${pc(jac,n)}</td></tr></table>
+<div class="msg ${ok?'ok':'err'}">Benchmark used: micro-averaged F1 on missing skills ≥ 70% (no official formula was given; the other metrics are shown separately). Result: ${f===null?'not computable':ok?'achieved':'NOT achieved'}.</div></div>
+<div class="card"><table><tr><th>#</th><th>Predicted missing</th><th>Expected</th><th>TP/FP/FN</th><th>Exact</th></tr>${rows.join('')}</table></div>`}
+$('run1').onclick=()=>evaluate(DEF);
+$('run2').onclick=()=>{try{const c=JSON.parse($('ejson').value);if(!Array.isArray(c)||!c.length||!c.every(x=>typeof x.resume==='string'&&typeof x.jd==='string'&&Array.isArray(x.expected)))throw 0;evaluate(c)}catch(e){$('eout').innerHTML='<div class="msg err">Invalid JSON. Expected an array of {"resume","jd","expected":[…]}.</div>'}};
+$('syn').onclick=()=>{const T=[['ReactJS','React.js',1],['NodeJS','Node.js',1],['JS','JavaScript',1],['PostgreSQL','Postgres',1],['Mongo DB','MongoDB',1],['React','Angular',0],['Java','JavaScript',0],['Git','GitHub',0]];
+$('eout').innerHTML=`<div class="card"><h2>Synonym checks (live)</h2><table>${T.map(([a,b,e])=>{const m=detect(b).some(s=>detect(a).includes(s));return`<tr><td>Resume: ${a}</td><td>JD: ${b}</td><td>expect ${e?'match':'no match'}</td><td>${m==!!e?'✅ pass':'❌ fail'}</td></tr>`}).join('')}</table></div>`};
+</script></body></html>
